@@ -1,0 +1,5 @@
+{
+  "name": "OmicsInsight SaaS Builder",
+  "description": "An interactive, step-by-step guide to building the OmicsInsight SaaS platform. This app walks users through the entire process, from idea validation to launch, providing explanations, examples, and checklists at each stage.",
+  "requestFramePermissions": []
+}
