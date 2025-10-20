@@ -1,9 +1,8 @@
-
 export interface Example {
   type: 'code' | 'text' | 'image';
   title: string;
   content: string;
-  language?: 'javascript' | 'python' | 'sql' | 'bash' | 'json';
+  language?: 'javascript' | 'python' | 'sql' | 'bash' | 'json' | 'r';
 }
 
 export interface ChecklistItem {

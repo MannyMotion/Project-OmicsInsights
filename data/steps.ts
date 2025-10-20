@@ -5,380 +5,366 @@ export const steps: Step[] = [
     id: 0,
     title: 'Intro & Idea Validation',
     description: 'Validating the core problem and solution for OmicsInsight.',
-    longDescription: 'Before writing a single line of code, it\'s crucial to validate that the problem you\'re solving is real and that your proposed solution is something users actually want. For OmicsInsight, this means confirming that biologists and researchers struggle with existing transcriptomic data analysis tools and would be willing to pay for a better alternative.',
+    longDescription: 'Before building our n8n workflows, we must validate that the problem is real and the solution is desired. For OmicsInsight, this means confirming that researchers struggle with omics data analysis and would value an automated, cloud-native platform orchestrated by a powerful workflow engine like n8n.',
     examples: [
       {
         type: 'text',
         title: 'User Persona: Dr. Anya Sharma',
-        content: 'Role: Postdoctoral Researcher in a molecular biology lab.\nPain Points: "Current tools are command-line based, require bioinformatics expertise, are poorly documented, and make collaboration difficult. I spend more time debugging scripts than analyzing results."',
+        content: 'Role: Postdoctoral Researcher in a molecular biology lab.\nPain Points: "Running analysis pipelines is manual, error-prone, and requires constant monitoring. I need a system that can take my raw data, run the analysis automatically, and notify me when it\'s done."',
       },
       {
         type: 'text',
-        title: 'Value Proposition',
-        content: 'OmicsInsight is a cloud-based platform that empowers biologists to analyze, visualize, and collaborate on transcriptomic data through an intuitive, no-code interface, accelerating research from months to days.',
+        title: 'Value Proposition (n8n-powered)',
+        content: 'OmicsInsight is a cloud-based platform that uses n8n to automate the analysis, visualization, and collaboration of transcriptomic data, empowering biologists and accelerating research from months to days.',
       },
     ],
     checklist: [
-      { text: 'Define the core problem your SaaS solves.' },
-      { text: 'Identify your target user persona(s).' },
-      { text: 'Conduct at least 5 interviews with potential users.' },
-      { text: 'Create a simple landing page to gauge interest.' },
+      { text: 'Define the core problem OmicsInsight solves.' },
+      { text: 'Identify target user personas for an automated platform.' },
+      { text: 'Conduct user interviews focused on workflow automation needs.' },
+      { text: 'Create a landing page to gauge interest in an n8n-powered solution.' },
       { text: 'Formulate a clear, one-sentence value proposition.' },
     ],
   },
   {
     id: 1,
     title: 'Research & Planning',
-    description: 'Analyzing competitors and defining the core feature set.',
-    longDescription: 'With a validated idea, the next step is to understand the market landscape. Analyze competitors to identify their strengths, weaknesses, and pricing. This will help you define a Minimum Viable Product (MVP) feature set that provides unique value and decide on a sustainable pricing strategy.',
+    description: 'Analyzing competitors and defining the MVP feature set.',
+    longDescription: 'With a validated idea, we now plan the Minimum Viable Product (MVP). We will analyze the market and define a core set of features that can be built and orchestrated effectively using n8n workflows, focusing on automation and reliability as key differentiators.',
     examples: [
       {
         type: 'text',
-        title: 'Competitive Analysis (Simplified)',
-        content: '- Galaxy: Open-source, powerful, but steep learning curve.\n- Basepair: Commercial, user-friendly, but expensive.\n- In-house Scripts: Highly customizable but not scalable or easily shareable.',
+        title: 'Competitive Analysis (Automation Focus)',
+        content: '- Galaxy: Powerful but requires manual step-by-step execution.\n- Basepair: User-friendly but a "black box" with limited workflow customization.\n- In-house Scripts: No robust orchestration, error handling, or status monitoring.',
       },
       {
-        // FIX: Changed type from 'json' to 'code' to align with the `Example` type definition. JSON is a type of code.
         type: 'code',
-        title: 'MVP Feature Map',
+        title: 'MVP Feature Map (for n8n)',
         language: 'json',
         content: `
 {
   "must_have": [
-    "Secure user authentication",
-    "Raw data upload (FASTQ files)",
-    "Run DESeq2 analysis pipeline",
-    "Generate volcano plot & heatmap",
-    "Export results as CSV"
+    "n8n Webhook for data upload",
+    "S3 storage for raw data",
+    "PostgreSQL for job tracking",
+    "n8n workflow to trigger Dockerized R analysis",
+    "Email notification on completion"
   ],
   "should_have": [
-    "Project-based data organization",
-    "Share projects with collaborators",
-    "Interactive plots"
+    "Job status polling workflow",
+    "Stripe integration for billing",
+    "Slack notifications for errors"
   ],
   "wont_have": [
-    "Multi-omics integration",
-    "Custom pipeline builder",
-    "On-premise deployment"
+    "Interactive UI for workflow building",
+    "On-premise n8n deployment"
   ]
 }`
       },
     ],
     checklist: [
-      { text: 'List 3-5 direct and indirect competitors.' },
-      { text: 'Create a feature comparison matrix.' },
-      { text: 'Define your MVP feature set using MoSCoW method.' },
-      { text: 'Outline a tiered pricing model (e.g., Free, Pro, Enterprise).' },
-      { text: 'Draft a high-level project roadmap for the next 6 months.' },
+      { text: 'List 3-5 competitors and analyze their automation capabilities.' },
+      { text: 'Define your MVP feature set based on what can be orchestrated by n8n.' },
+      { text: 'Outline the core n8n workflows needed (e.g., Upload, Analyze, Notify).' },
+      { text: 'Draft a tiered pricing model based on usage/analysis minutes.' },
+      { text: 'Create a high-level project roadmap for the next 6 months.' },
     ],
   },
   {
     id: 2,
-    title: 'Technical Architecture',
-    description: 'Designing the blueprint of your application.',
-    longDescription: 'This is where you decide on the technologies and patterns that will form the foundation of OmicsInsight. A well-designed architecture ensures your application is scalable, maintainable, and secure. We will choose a modern tech stack that balances development speed with performance.',
+    title: 'n8n Technical Architecture',
+    description: 'Designing the blueprint for your n8n-orchestrated application.',
+    longDescription: 'Here, we design the high-level architecture with n8n at its core. n8n will act as the "brain" of our operation, receiving requests, triggering jobs in containerized workers, storing data, updating our database, and handling notifications. This creates a robust, scalable, and observable system.',
     examples: [
         {
             type: 'image',
-            title: 'High-Level Architecture Diagram',
-            content: 'https://picsum.photos/seed/tech/600/350'
+            title: 'n8n-Centric Architecture Diagram',
+            content: 'https://picsum.photos/seed/n8n-arch/600/350'
         },
         {
             type: 'text',
             title: 'Tech Stack Choices',
-            content: '- Frontend: React (Next.js) for a fast, modern UI with server-side rendering.\n- Backend: FastAPI (Python) for its performance and because most bioinformatics tools are Python-based.\n- Database: PostgreSQL for reliable, structured data (users, projects, metadata).\n- Storage: AWS S3 for scalable storage of large omics data files.\n- Authentication: NextAuth.js for easy integration of social and credential-based logins.'
+            content: '- Orchestration: n8n (self-hosted via Docker) to manage all workflows.\n- Analysis Workers: Docker containers running R scripts (e.g., DESeq2).\n- Job Runner: A simple FastAPI microservice that n8n calls to start Docker containers.\n- Database: PostgreSQL to store user, job, and billing metadata.\n- Storage: AWS S3 for raw data, intermediate files, and final results.\n- Frontend: A simple React UI to interact with the n8n webhook endpoint.'
         },
     ],
     checklist: [
-        { text: 'Choose and document your frontend framework.' },
-        { text: 'Select a backend language and framework.' },
-        { text: 'Decide on a primary database and a file storage solution.' },
-        { text: 'Design the basic API endpoints (e.g., /users, /projects, /upload).' },
-        { text: 'Plan your authentication and authorization strategy.' }
+        { text: 'Design the primary n8n workflows (Upload, Analysis, Monitoring).' },
+        { text: 'Define the API contract between n8n and the R worker job runner.' },
+        { text: 'Choose a database and file storage solution (Postgres & S3).' },
+        { text: 'Design the database schema for users, jobs, and results.' },
+        { text: 'Plan your authentication strategy for n8n webhooks (API keys).' }
     ]
   },
    {
     id: 3,
     title: 'Development Environment Setup',
-    description: 'Preparing your local machine for coding.',
-    longDescription: 'Consistency is key. Setting up a standardized development environment for yourself and your future team ensures that code works reliably everywhere. This involves installing necessary tools, setting up version control, and creating the initial project structures.',
+    description: 'Preparing your local machine with Docker Compose.',
+    longDescription: 'To ensure a consistent and reproducible development environment, we will use Docker Compose to run n8n, PostgreSQL, and a local S3 alternative (MinIO) with a single command. This mirrors the production setup and simplifies development.',
     examples: [
       {
         type: 'code',
-        title: 'Frontend Setup (Next.js)',
+        title: 'docker-compose.yml for Local Dev',
         language: 'bash',
         content: `
-# Install Next.js with TypeScript and Tailwind CSS
-npx create-next-app@latest omics-insight-ui --ts --tailwind --eslint
+version: '3.8'
 
-# Navigate into the project directory
-cd omics-insight-ui
+services:
+  n8n:
+    image: n8nio/n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=localhost
+      - DB_TYPE=postgresdb
+      # ... other DB and credential env vars
+    volumes:
+      - n8n_data:/home/node/.n8n
 
-# Run the development server
-npm run dev`
-      },
-      {
-        type: 'code',
-        title: 'Backend Setup (FastAPI)',
-        language: 'bash',
-        content: `
-# Create a project directory and a virtual environment
-mkdir omics-insight-api && cd omics-insight-api
-python -m venv venv
-source venv/bin/activate
+  postgres:
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=n8n
+      # ... other PG env vars
+    volumes:
+      - pg_data:/var/lib/postgresql/data
 
-# Install FastAPI and an ASGI server
-pip install fastapi "uvicorn[standard]"`
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    # ... other MinIO config
+volumes:
+  n8n_data:
+  pg_data:`
       },
     ],
     checklist: [
-      { text: 'Install Node.js and a package manager (npm/yarn).' },
-      { text: 'Install Python and a virtual environment tool.' },
-      { text: 'Set up a Git repository on GitHub/GitLab.' },
-      { text: 'Initialize the frontend and backend projects.' },
-      { text: 'Install a code editor like VS Code with recommended extensions.' },
+      { text: 'Install Docker and Docker Compose.' },
+      { text: 'Create a docker-compose.yml file for n8n, Postgres, and MinIO.' },
+      { text: 'Configure n8n environment variables to connect to the database.' },
+      { text: 'Set up credentials in n8n for AWS (MinIO), Postgres, etc.' },
+      { text: 'Run `docker-compose up` and confirm all services start correctly.' },
     ],
   },
   {
     id: 4,
-    title: 'Core Feature Implementation',
-    description: 'Building the foundational features of the MVP.',
-    longDescription: 'Now it\'s time to bring the MVP to life. Focus on the "must-have" features identified in the planning stage. We will start with user authentication, data upload, and the primary analysis pipeline. This is the heart of the application.',
+    title: 'Core Workflow: Upload & Analysis',
+    description: 'Building the foundational n8n workflows.',
+    longDescription: 'This is the heart of the application. We will build the n8n workflows that handle file uploads, trigger the analysis in a Docker container, and monitor the job status. This workflow will be the primary entry point for users.',
     examples: [
       {
         type: 'code',
-        title: 'React Upload Component (Simplified)',
-        language: 'javascript',
+        title: 'n8n Upload Handler Workflow (Simplified)',
+        language: 'json',
         content: `
-import { useState } from 'react';
-
-function DataUploader() {
-  const [file, setFile] = useState(null);
-
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('file', file);
-    // POST to your backend API endpoint
-    await fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    });
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input type="file" onChange={handleFileChange} />
-      <button type="submit">Upload</button>
-    </form>
-  );
-}`
+// 1. Webhook Node: Receives file info from frontend.
+// 2. S3 Node (Presigned URL): Generates a secure upload URL.
+// 3. Respond to Webhook Node: Returns the URL to the frontend.
+// 4. Postgres Node: Inserts a new job record with 'PENDING' status.
+// 5. HTTP Request Node: Calls the 'Start Analysis' workflow.`
       },
        {
         type: 'code',
-        title: 'FastAPI Upload Endpoint',
+        title: 'FastAPI Job Runner Endpoint',
         language: 'python',
         content: `
-from fastapi import FastAPI, File, UploadFile
-import shutil
+from fastapi import FastAPI, BackgroundTasks
+import docker
 
 app = FastAPI()
+client = docker.from_env()
 
-@app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile = File(...)):
-    # In a real app, you'd upload this to S3
-    with open(f"temp_{file.filename}", "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    
-    # Trigger analysis pipeline here
-    
-    return {"filename": file.filename, "status": "upload successful"}`
+def run_deseq2_container(s3_path: str, job_id: str):
+    # Command to run the R script inside the container
+    command = f"Rscript /app/run_deseq2.R --input {s3_path} --job {job_id}"
+    client.containers.run("omics-worker:latest", command, detach=False)
+    # Update job status in DB...
+
+@app.post("/run-analysis")
+async def run_analysis(job: dict, background_tasks: BackgroundTasks):
+    s3_path = job.get("s3_path")
+    job_id = job.get("job_id")
+    background_tasks.add_task(run_deseq2_container, s3_path, job_id)
+    return {"message": "Analysis started"}`
       },
     ],
     checklist: [
-      { text: 'Implement user registration and login.' },
-      { text: 'Create a secure file upload endpoint.' },
-      { text: 'Build the UI for creating projects and uploading data.' },
-      { text: 'Integrate the core analysis script (e.g., a DESeq2 wrapper).' },
-      { text: 'Store analysis results in the database.' },
+      { text: 'Build the "Upload Handler" n8n workflow.' },
+      { text: 'Build the "Start Analysis" n8n workflow.' },
+      { text: 'Create the Dockerfile and R script for the analysis worker.' },
+      { text: 'Implement the FastAPI job runner microservice.' },
+      { text: 'Test the end-to-end flow from webhook to container execution.' },
     ],
   },
   {
     id: 5,
-    title: 'Visualization & Collaboration',
-    description: 'Making data understandable and shareable.',
-    longDescription: 'Raw data is not useful. The real value of OmicsInsight comes from its ability to present complex results in an intuitive, interactive format. This step focuses on building dashboards with plots and tables, and adding features for collaboration.',
+    title: 'R Worker & Containerization',
+    description: 'Creating the DESeq2 analysis worker.',
+    longDescription: 'The actual scientific analysis happens inside a Docker container. We will create an R script that runs DESeq2, parameterize it to accept inputs via command-line arguments, and wrap it in a Dockerfile with all necessary dependencies.',
     examples: [
       {
-        type: 'image',
-        title: 'Mockup of an Interactive Dashboard',
-        content: 'https://picsum.photos/seed/dash/600/350'
+        type: 'code',
+        title: 'Dockerfile for R Worker',
+        language: 'bash',
+        content: `
+FROM rocker/r-ver:4.2.0
+
+RUN R -e "install.packages('BiocManager', repos = 'http://cran.us.r-project.org')"
+RUN R -e "BiocManager::install('DESeq2')"
+RUN R -e "install.packages('argparse')"
+
+WORKDIR /app
+COPY run_deseq2.R .
+
+ENTRYPOINT ["Rscript", "/app/run_deseq2.R"]`
       },
       {
         type: 'code',
-        title: 'React Chart Component (using Recharts)',
-        language: 'javascript',
+        title: 'R Script Snippet (argparse)',
+        language: 'r',
         content: `
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+library("argparse")
+parser <- ArgumentParser()
 
-const VolcanoPlot = ({ data }) => (
-  <ScatterChart width={600} height={400}>
-    <CartesianGrid />
-    <XAxis type="number" dataKey="log2FoldChange" name="log2 Fold Change" />
-    <YAxis type="number" dataKey="pvalue" name="p-value" />
-    <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-    <Scatter name="Genes" data={data} fill="#8884d8" />
-  </ScatterChart>
-);`
+parser$add_argument("--counts", help="Path to counts CSV file.")
+parser$add_argument("--metadata", help="Path to metadata CSV file.")
+parser$add_argument("--out_prefix", help="Prefix for output files.")
+
+args <- parser$parse_args()
+
+# ... Your DESeq2 code here using args$counts, etc.
+# ... Write results (plots, CSVs) to files.`
       },
     ],
     checklist: [
-      { text: 'Implement a results dashboard page.' },
-      { text: 'Integrate a charting library (e.g., Recharts, D3).' },
-      { text: 'Build interactive volcano plot and heatmap visualizations.' },
-      { text: 'Develop a feature to share a project with another user (read-only).' },
-      { text: 'Add a commenting system for collaboration on results.' },
+      { text: 'Write the R script to perform DESeq2 analysis.' },
+      { text: 'Add argument parsing to the R script for inputs/outputs.' },
+      { text: 'Create a Dockerfile to install R, BiocManager, and dependencies.' },
+      { text: 'Build the Docker image and test it locally.' },
+      { text: 'Push the Docker image to a container registry (e.g., Docker Hub, AWS ECR).' },
     ],
   },
   {
     id: 6,
-    title: 'Testing & Optimization',
-    description: 'Ensuring the application is reliable and performant.',
-    longDescription: 'Before launching, it\'s critical to ensure your application is bug-free, fast, and provides a good user experience. This involves writing automated tests, manually testing user flows, gathering feedback, and optimizing performance.',
+    title: 'Workflow: Monitoring & Notifications',
+    description: 'Ensuring reliability and keeping users informed.',
+    longDescription: 'A long-running analysis needs monitoring. We will create a polling workflow in n8n that checks job status. Upon completion or failure, it will trigger another workflow to process results and notify the user via email or Slack.',
     examples: [
       {
         type: 'code',
-        title: 'Backend Unit Test (Pytest)',
-        language: 'python',
+        title: 'n8n Job Monitor Workflow (Logic)',
+        language: 'json',
         content: `
-from fastapi.testclient import TestClient
-from main import app
-
-client = TestClient(app)
-
-def test_read_main():
-    response = client.get("/")
-    assert response.status_code == 200
-    assert response.json() == {"msg": "Hello World"}
-
-def test_unauthorized_upload():
-    # This test should fail without an auth token
-    with open("testfile.txt", "wb") as f:
-        f.write(b"some content")
-    with open("testfile.txt", "rb") as f:
-        response = client.post("/uploadfile/", files={"file": f})
-    assert response.status_code == 401 # Assuming auth is implemented`
+// 1. Cron Node: Run every 5 minutes.
+// 2. Postgres Node: SELECT * FROM jobs WHERE status = 'RUNNING'.
+// 3. SplitInBatches Node: Process each running job.
+// 4. HTTP Request Node: Poll the job runner for status.
+// 5. IF Node: Check if status is 'COMPLETED' or 'FAILED'.
+// 6. On 'COMPLETED': Trigger 'Results Post-Processing' workflow.
+// 7. On 'FAILED': Trigger 'Error Notification' workflow.`
+      },
+      {
+        type: 'code',
+        title: 'n8n Notification Workflow (Nodes)',
+        language: 'json',
+        content: `
+// 1. Webhook Node: Triggered by other workflows.
+// 2. IF Node: Check if status is success or failure.
+// 3. Email Node (Success): Send an email with a link to results.
+// 4. Slack Node (Failure): Send an alert to the admin channel.`
       },
     ],
     checklist: [
-      { text: 'Write unit tests for critical backend logic.' },
-      { text: 'Write integration tests for API endpoints.' },
-      { text: 'Perform end-to-end manual testing of all user flows.' },
-      { text: 'Gather feedback from a small group of beta testers.' },
-      { text: 'Optimize database queries and frontend load times.' },
+      { text: 'Build the "Job Monitor" n8n workflow.' },
+      { text: 'Build the "Results Post-Processing" workflow (e.g., zip files, generate PDF).' },
+      { text: 'Build the "Notification" workflow for success and failure cases.' },
+      { text: 'Configure Email and Slack credentials in n8n.' },
+      { text: 'Test the monitoring and notification flows.' },
     ],
   },
   {
     id: 7,
     title: 'Deployment',
-    description: 'Making your application live on the internet.',
-    longDescription: 'Deployment is the process of taking your code from your local machine and putting it onto a production server. We will use modern cloud platforms that simplify this process with features like continuous integration and continuous deployment (CI/CD).',
+    description: 'Making your n8n-powered service live.',
+    longDescription: 'Deployment involves setting up n8n and its supporting services (Postgres, job runner) in a production environment. We will use a cloud provider and focus on container-based deployments for consistency and scalability.',
     examples: [
       {
         type: 'text',
-        title: 'Deployment Strategy',
-        content: '- Frontend (Next.js): Deploy to Vercel. Connect your Git repository for automatic deployments on every push to the main branch.\n- Backend (FastAPI): Containerize with Docker and deploy to a service like AWS Elastic Beanstalk or DigitalOcean App Platform.\n- Database: Use a managed database service like Amazon RDS or Supabase Postgres.',
+        title: 'Production Deployment Strategy',
+        content: '- n8n: Deploy using Docker on a cloud VM (e.g., DigitalOcean Droplet, AWS EC2) or a managed container service.\n- R Worker: Use a service like AWS Fargate or Google Cloud Run to run analysis containers on-demand.\n- FastAPI Job Runner: Deploy as a container alongside n8n.\n- Database: Use a managed database service like Amazon RDS or Supabase Postgres.',
       },
       {
-        type: 'code',
-        title: 'Simple Dockerfile for FastAPI',
-        language: 'bash',
-        content: `
-FROM python:3.9
-
-WORKDIR /code
-
-COPY ./requirements.txt /code/requirements.txt
-
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-
-COPY ./app /code/app
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]`
+        type: 'text',
+        title: 'Security Best Practices',
+        content: '- Protect n8n webhook URLs with a secret token or HMAC validation.\n- Use n8n\'s built-in credential management; do not hardcode keys.\n- Use pre-signed S3 URLs for uploads to avoid data passing through the n8n instance.\n- Enforce SSL/HTTPS on all endpoints.'
       },
     ],
     checklist: [
-      { text: 'Set up a production database.' },
-      { text: 'Containerize your backend application using Docker.' },
-      { text: 'Choose a cloud provider (Vercel, AWS, etc.).' },
-      { text: 'Configure environment variables for production.' },
-      { text: 'Set up a CI/CD pipeline for automatic deployments.' },
+      { text: 'Set up a production database (e.g., AWS RDS).' },
+      { text: 'Choose a cloud provider and deployment method for n8n.' },
+      { text: 'Deploy the FastAPI job runner service.' },
+      { text: 'Configure production environment variables and credentials in n8n.' },
+      { text: 'Set up a reverse proxy (e.g., Nginx) with HTTPS for all services.' },
     ],
   },
   {
     id: 8,
-    title: 'Monetization & Growth',
-    description: 'Integrating payments and planning for user acquisition.',
-    longDescription: 'A SaaS business needs to make money. This step involves integrating a payment processor like Stripe to handle subscriptions. You also need a plan to attract your first users through marketing and community engagement.',
+    title: 'Workflow: Billing & Admin',
+    description: 'Integrating Stripe for payments and creating admin workflows.',
+    longDescription: 'To monetize the service, we will create an n8n workflow that listens to Stripe webhooks to manage user subscriptions. We will also build administrative workflows for maintenance tasks like cleaning up old data and monitoring costs.',
     examples: [
       {
-        type: 'text',
-        title: 'Pricing Tiers',
-        content: '- Academic (Free): 1 project, 2GB storage, basic analysis.\n- Pro ($49/mo): 10 projects, 50GB storage, advanced visualizations, collaboration.\n- Lab ($199/mo): Unlimited projects, 500GB storage, user management, priority support.',
+        type: 'code',
+        title: 'n8n Stripe Webhook Handler (Nodes)',
+        language: 'json',
+        content: `
+// 1. Stripe Webhook Node: Listens for events like 'invoice.paid'.
+// 2. Switch Node: Route logic based on event type.
+// 3. For 'invoice.paid':
+//    - Postgres Node: UPDATE users SET plan = 'pro' WHERE stripe_customer_id = {{ $json.body.customer }}.
+// 4. For 'customer.subscription.deleted':
+//    - Postgres Node: UPDATE users SET plan = 'free' WHERE stripe_customer_id = {{ $json.body.customer }}.`
       },
       {
         type: 'code',
-        title: 'Stripe Integration Snippet (Server-side)',
-        language: 'python',
+        title: 'Admin Cleanup Workflow (Nodes)',
+        language: 'json',
         content: `
-import stripe
-
-stripe.api_key = 'YOUR_SECRET_KEY'
-
-@app.post('/create-checkout-session')
-async def create_checkout_session(price_id: str):
-    try:
-        checkout_session = stripe.checkout.Session.create(
-            line_items=[{'price': price_id, 'quantity': 1}],
-            mode='subscription',
-            success_url='https://omics.com/success',
-            cancel_url='https://omics.com/cancel',
-        )
-        return {"url": checkout_session.url}
-    except Exception as e:
-        return {'error': str(e)}`
+// 1. Cron Node: Run daily at midnight.
+// 2. Postgres Node: SELECT user_id FROM users WHERE plan = 'free'.
+// 3. S3 Node: List files older than 30 days for free-tier users.
+// 4. S3 Node: Delete old files.`
       },
     ],
     checklist: [
-      { text: 'Create a Stripe or Paddle account.' },
-      { text: 'Define your subscription plans and prices.' },
-      { text: 'Integrate the payment gateway into your app.' },
-      { text: 'Create a marketing landing page.' },
-      { text: 'Draft an initial user acquisition strategy (e.g., content marketing, academic outreach).' },
+      { text: 'Create a Stripe account and define your subscription products.' },
+      { text: 'Build the "Stripe Webhook Handler" n8n workflow.' },
+      { text: 'Add subscription/plan status to your `users` table in Postgres.' },
+      { text: 'Build the "Admin Cleanup" workflow.' },
+      { text: 'Create a cost-monitoring workflow that sends a daily summary to Slack.' },
     ],
   },
   {
     id: 9,
     title: 'Launch & Export Summary',
     description: 'Final checks and exporting your project plan.',
-    longDescription: 'Congratulations! You have planned and built the foundation of your SaaS. This final step is about running through a pre-launch checklist and then celebrating your launch. You can also export all your progress from this builder as a JSON file to serve as a record of your project plan.',
+    longDescription: 'Congratulations! You have designed a fully automated SaaS orchestrated by n8n. This final step is about running through a pre-launch checklist and celebrating. You can also export your progress from this builder as a JSON file to document your entire plan.',
     examples: [
       {
         type: 'text',
         title: 'Pre-Launch Checklist',
-        content: '- [ ] Set up analytics (e.g., Google Analytics, Plausible).\n- [ ] Set up error monitoring (e.g., Sentry).\n- [ ] Double-check all production environment variables.\n- [ ] Announce your launch on relevant platforms (e.g., Twitter, LinkedIn, Product Hunt).',
+        content: '- [ ] Set up logging and monitoring for n8n and all microservices.\n- [ ] Set up error monitoring (e.g., Sentry) via n8n\'s error workflow trigger.\n- [ ] Double-check all production credentials and environment variables.\n- [ ] Announce your launch on relevant platforms (e.g., Twitter, LinkedIn, scientific forums).',
       }
     ],
     checklist: [
       { text: 'Complete the pre-launch checklist.' },
-      { text: 'Prepare your launch announcement.' },
-      { text: 'Monitor the application for errors and feedback post-launch.' },
+      { text: 'Prepare your launch announcement and marketing materials.' },
+      { text: 'Monitor n8n execution logs for errors after launch.' },
       { text: 'Export your project summary from this builder.' },
-      { text: 'Celebrate your hard work!' },
+      { text: 'Celebrate building a robust, automated platform!' },
     ],
   },
 ];
