@@ -3,366 +3,370 @@ import type { Step } from '../types';
 export const steps: Step[] = [
   {
     id: 0,
-    title: 'Intro & Idea Validation',
-    description: 'Validating the core problem and solution for OmicsInsight.',
-    longDescription: 'Before building our n8n workflows, we must validate that the problem is real and the solution is desired. For OmicsInsight, this means confirming that researchers struggle with omics data analysis and would value an automated, cloud-native platform orchestrated by a powerful workflow engine like n8n.',
+    title: 'Setup & Prerequisites',
+    description: 'Gathering the tools and accounts needed to build OmicsInsight.',
+    longDescription: 'Welcome to the OmicsInsight Builder! Before we write any code or build any workflows, we need to set up our foundational tools and services. This step ensures you have everything required to follow along smoothly. We will install local development software and sign up for the essential cloud services that will power our application.',
     examples: [
-      {
+       {
         type: 'text',
-        title: 'User Persona: Dr. Anya Sharma',
-        content: 'Role: Postdoctoral Researcher in a molecular biology lab.\nPain Points: "Running analysis pipelines is manual, error-prone, and requires constant monitoring. I need a system that can take my raw data, run the analysis automatically, and notify me when it\'s done."',
-      },
-      {
-        type: 'text',
-        title: 'Value Proposition (n8n-powered)',
-        content: 'OmicsInsight is a cloud-based platform that uses n8n to automate the analysis, visualization, and collaboration of transcriptomic data, empowering biologists and accelerating research from months to days.',
+        title: 'Required Software & Accounts',
+        content: `
+1. n8n Cloud Account: The fastest way to start. Go to n8n.io and sign up for a free starter plan.
+2. Docker Desktop: The engine for running our application components locally. Download from docker.com.
+3. A Code Editor: We recommend VS Code (code.visualstudio.com), but any editor will do.
+4. AWS Account: For S3 file storage in production. Sign up at aws.amazon.com.
+5. PostgreSQL Database: We'll use a local one for development, but for production, a service like Supabase, Neon, or AWS RDS is recommended.
+6. Stripe Account: To handle payments and subscriptions. Sign up at stripe.com.`
       },
     ],
     checklist: [
-      { text: 'Define the core problem OmicsInsight solves.' },
-      { text: 'Identify target user personas for an automated platform.' },
-      { text: 'Conduct user interviews focused on workflow automation needs.' },
-      { text: 'Create a landing page to gauge interest in an n8n-powered solution.' },
-      { text: 'Formulate a clear, one-sentence value proposition.' },
+      { text: 'Sign up for an n8n cloud account.' },
+      { text: 'Install Docker and Docker Compose on your machine.' },
+      { text: 'Install Visual Studio Code or your preferred code editor.' },
+      { text: 'Create a free AWS account for S3 access.' },
+      { text: 'Create a free Stripe developer account.' },
     ],
   },
   {
     id: 1,
-    title: 'Research & Planning',
-    description: 'Analyzing competitors and defining the MVP feature set.',
-    longDescription: 'With a validated idea, we now plan the Minimum Viable Product (MVP). We will analyze the market and define a core set of features that can be built and orchestrated effectively using n8n workflows, focusing on automation and reliability as key differentiators.',
-    examples: [
-      {
-        type: 'text',
-        title: 'Competitive Analysis (Automation Focus)',
-        content: '- Galaxy: Powerful but requires manual step-by-step execution.\n- Basepair: User-friendly but a "black box" with limited workflow customization.\n- In-house Scripts: No robust orchestration, error handling, or status monitoring.',
-      },
-      {
-        type: 'code',
-        title: 'MVP Feature Map (for n8n)',
-        language: 'json',
-        content: `
-{
-  "must_have": [
-    "n8n Webhook for data upload",
-    "S3 storage for raw data",
-    "PostgreSQL for job tracking",
-    "n8n workflow to trigger Dockerized R analysis",
-    "Email notification on completion"
-  ],
-  "should_have": [
-    "Job status polling workflow",
-    "Stripe integration for billing",
-    "Slack notifications for errors"
-  ],
-  "wont_have": [
-    "Interactive UI for workflow building",
-    "On-premise n8n deployment"
-  ]
-}`
-      },
-    ],
-    checklist: [
-      { text: 'List 3-5 competitors and analyze their automation capabilities.' },
-      { text: 'Define your MVP feature set based on what can be orchestrated by n8n.' },
-      { text: 'Outline the core n8n workflows needed (e.g., Upload, Analyze, Notify).' },
-      { text: 'Draft a tiered pricing model based on usage/analysis minutes.' },
-      { text: 'Create a high-level project roadmap for the next 6 months.' },
-    ],
-  },
-  {
-    id: 2,
-    title: 'n8n Technical Architecture',
-    description: 'Designing the blueprint for your n8n-orchestrated application.',
-    longDescription: 'Here, we design the high-level architecture with n8n at its core. n8n will act as the "brain" of our operation, receiving requests, triggering jobs in containerized workers, storing data, updating our database, and handling notifications. This creates a robust, scalable, and observable system.',
-    examples: [
-        {
-            type: 'image',
-            title: 'n8n-Centric Architecture Diagram',
-            content: 'https://picsum.photos/seed/n8n-arch/600/350'
-        },
-        {
-            type: 'text',
-            title: 'Tech Stack Choices',
-            content: '- Orchestration: n8n (self-hosted via Docker) to manage all workflows.\n- Analysis Workers: Docker containers running R scripts (e.g., DESeq2).\n- Job Runner: A simple FastAPI microservice that n8n calls to start Docker containers.\n- Database: PostgreSQL to store user, job, and billing metadata.\n- Storage: AWS S3 for raw data, intermediate files, and final results.\n- Frontend: A simple React UI to interact with the n8n webhook endpoint.'
-        },
-    ],
-    checklist: [
-        { text: 'Design the primary n8n workflows (Upload, Analysis, Monitoring).' },
-        { text: 'Define the API contract between n8n and the R worker job runner.' },
-        { text: 'Choose a database and file storage solution (Postgres & S3).' },
-        { text: 'Design the database schema for users, jobs, and results.' },
-        { text: 'Plan your authentication strategy for n8n webhooks (API keys).' }
-    ]
-  },
-   {
-    id: 3,
-    title: 'Development Environment Setup',
-    description: 'Preparing your local machine with Docker Compose.',
-    longDescription: 'To ensure a consistent and reproducible development environment, we will use Docker Compose to run n8n, PostgreSQL, and a local S3 alternative (MinIO) with a single command. This mirrors the production setup and simplifies development.',
+    title: 'Local Environment with Docker',
+    description: 'Use Docker Compose to run n8n, Postgres, and MinIO locally.',
+    longDescription: 'To ensure our development environment is consistent and easy to manage, we will use Docker Compose. This tool allows us to define and run all our services (n8n for workflows, PostgreSQL for the database, and MinIO as a local S3-alternative) with a single command. This perfectly mimics a real production setup.',
     examples: [
       {
         type: 'code',
-        title: 'docker-compose.yml for Local Dev',
+        title: 'Project Structure',
         language: 'bash',
+        content: `
+omics-insight/
+├── docker-compose.yml
+├── .env
+├── runner/
+│   └── ... (FastAPI code)
+└── worker/
+    └── ... (R script and Dockerfile)`
+      },
+      {
+        type: 'code',
+        title: 'docker-compose.yml for Local Development',
+        language: 'yaml',
         content: `
 version: '3.8'
 
 services:
   n8n:
     image: n8nio/n8n
+    restart: always
     ports:
       - "5678:5678"
     environment:
       - N8N_HOST=localhost
       - DB_TYPE=postgresdb
-      # ... other DB and credential env vars
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_USER=\${POSTGRES_USER}
+      - DB_POSTGRESDB_PASSWORD=\${POSTGRES_PASSWORD}
+      - DB_POSTGRESDB_DATABASE=\${POSTGRES_DB}
+      - DB_POSTGRESDB_PORT=5432
     volumes:
       - n8n_data:/home/node/.n8n
 
   postgres:
     image: postgres:13
-    ports:
-      - "5432:5432"
+    restart: always
     environment:
-      - POSTGRES_USER=n8n
-      # ... other PG env vars
+      - POSTGRES_USER=\${POSTGRES_USER}
+      - POSTGRES_PASSWORD=\${POSTGRES_PASSWORD}
+      - POSTGRES_DB=\${POSTGRES_DB}
     volumes:
       - pg_data:/var/lib/postgresql/data
 
-  minio:
-    image: minio/minio
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    # ... other MinIO config
 volumes:
   n8n_data:
   pg_data:`
       },
+      {
+        type: 'code',
+        title: '.env (Environment Variables)',
+        language: 'bash',
+        content: `
+# For PostgreSQL
+POSTGRES_USER=n8n
+POSTGRES_PASSWORD=mysecretpassword
+POSTGRES_DB=omics_insight
+`
+      },
     ],
     checklist: [
-      { text: 'Install Docker and Docker Compose.' },
-      { text: 'Create a docker-compose.yml file for n8n, Postgres, and MinIO.' },
-      { text: 'Configure n8n environment variables to connect to the database.' },
-      { text: 'Set up credentials in n8n for AWS (MinIO), Postgres, etc.' },
-      { text: 'Run `docker-compose up` and confirm all services start correctly.' },
+      { text: 'Create a new project folder named `omics-insight`.' },
+      { text: 'Inside, create a file named `docker-compose.yml` and paste the code.' },
+      { text: 'Create a file named `.env` and add the Postgres credentials.' },
+      { text: 'Open your terminal in the project folder and run `docker-compose up`.' },
+      { text: 'Access your local n8n instance by opening `http://localhost:5678` in your browser.' },
+    ],
+  },
+  {
+    id: 2,
+    title: 'Create the R Worker Image',
+    description: 'Build the Docker container that will run our DESeq2 analysis.',
+    longDescription: 'The core scientific analysis will be performed by an R script packaged inside a Docker container. This makes our analysis environment portable and reproducible. We will create a simple R script that takes file paths as inputs, and then write a `Dockerfile` to build an image containing R, all necessary packages, and our script.',
+    examples: [
+        {
+            type: 'code',
+            title: 'worker/run_deseq2.R',
+            language: 'r',
+            content: `
+# A simplified script for demonstration.
+# In a real scenario, this would load DESeq2, read files,
+# run the analysis, and save plots/CSVs to an output directory.
+
+# Read command line arguments
+args <- commandArgs(trailingOnly=TRUE)
+cat("Received args:", args, "\n")
+
+# Simulate work
+cat("Starting DESeq2 analysis...\n")
+Sys.sleep(15) # Simulate a 15-second analysis
+cat("Analysis complete.\n")
+
+# Create a dummy output file
+write.csv(data.frame(result=c(1,2,3)), file = "results.csv")
+cat("Results saved.\n")`
+        },
+        {
+            type: 'code',
+            title: 'worker/Dockerfile',
+            language: 'bash',
+            content: `
+FROM rocker/r-ver:4.2.0
+
+# Install DESeq2 and its dependencies
+RUN R -e "install.packages('BiocManager', repos = 'http://cran.us.r-project.org')"
+RUN R -e "BiocManager::install('DESeq2')"
+
+# Copy our script into the container
+WORKDIR /app
+COPY run_deseq2.R .
+
+# Set the entrypoint
+ENTRYPOINT ["Rscript", "/app/run_deseq2.R"]`
+        },
+    ],
+    checklist: [
+        { text: 'Inside your project, create a new folder named `worker`.' },
+        { text: 'Create the `run_deseq2.R` file inside the `worker` folder.' },
+        { text: 'Create the `Dockerfile` inside the `worker` folder.' },
+        { text: 'Build the image by running `docker build -t omics-worker:latest ./worker` in your terminal.' },
+        { text: 'Test the worker by running `docker run --rm omics-worker:latest --input test.csv`.' }
+    ]
+  },
+   {
+    id: 3,
+    title: 'Build the n8n Upload Workflow',
+    description: 'Create the first n8n workflow to handle incoming analysis requests.',
+    longDescription: 'This workflow is the public entry point to our service. It will be triggered by a webhook call from our future frontend. Its job is to securely receive file information, create a new job entry in our PostgreSQL database, and then trigger the next workflow to start the analysis.',
+    examples: [
+      {
+        type: 'text',
+        title: 'Workflow Steps & Node Configuration',
+        content: `
+1.  **Start Node:** This is always present.
+2.  **Webhook Node:**
+    -   Authentication: Header Auth
+    -   HTTP Method: POST
+    -   Copy the "Test URL". We'll use this to send sample data.
+3.  **Postgres Node:**
+    -   Create new Postgres credentials to connect to your local Docker database (Host: postgres, User/Pass/DB from .env).
+    -   Operation: Execute Query
+    -   Query: INSERT INTO jobs (user_id, status) VALUES ('{{$json.body.userId}}', 'PENDING') RETURNING id;
+4.  **Set Node:**
+    -   Name: job_id, Value: {{$node["Postgres"].json["id"]}}
+    -   This extracts the new job ID from the Postgres node's output.
+5.  **Execute Workflow Node:**
+    -   This node will trigger our *next* workflow, passing the job_id along. (We'll build that workflow in the next step).`
+      },
+    ],
+    checklist: [
+      { text: 'In your n8n UI, create a new blank workflow named "Upload Handler".' },
+      { text: 'Add and configure the Webhook node.' },
+      { text: 'Set up your Postgres credentials in n8n.' },
+      { text: 'Add and configure the Postgres node with the INSERT query.' },
+      { text: 'Add a Set node to capture the returned job ID.' },
+      { text: 'Save the workflow.' },
     ],
   },
   {
     id: 4,
-    title: 'Core Workflow: Upload & Analysis',
-    description: 'Building the foundational n8n workflows.',
-    longDescription: 'This is the heart of the application. We will build the n8n workflows that handle file uploads, trigger the analysis in a Docker container, and monitor the job status. This workflow will be the primary entry point for users.',
+    title: 'Build the n8n Analysis Workflow',
+    description: 'Create the workflow that runs the Docker container.',
+    longDescription: 'This internal workflow is triggered by the "Upload Handler". Its sole responsibility is to take a job ID, prepare the necessary command, and execute our R worker Docker container. For this, we\'ll use the "Execute Command" node which can run shell commands on the machine where n8n is running.',
     examples: [
       {
-        type: 'code',
-        title: 'n8n Upload Handler Workflow (Simplified)',
+        type: 'text',
+        title: 'Workflow Steps & Node Configuration',
         language: 'json',
         content: `
-// 1. Webhook Node: Receives file info from frontend.
-// 2. S3 Node (Presigned URL): Generates a secure upload URL.
-// 3. Respond to Webhook Node: Returns the URL to the frontend.
-// 4. Postgres Node: Inserts a new job record with 'PENDING' status.
-// 5. HTTP Request Node: Calls the 'Start Analysis' workflow.`
-      },
-       {
-        type: 'code',
-        title: 'FastAPI Job Runner Endpoint',
-        language: 'python',
-        content: `
-from fastapi import FastAPI, BackgroundTasks
-import docker
-
-app = FastAPI()
-client = docker.from_env()
-
-def run_deseq2_container(s3_path: str, job_id: str):
-    # Command to run the R script inside the container
-    command = f"Rscript /app/run_deseq2.R --input {s3_path} --job {job_id}"
-    client.containers.run("omics-worker:latest", command, detach=False)
-    # Update job status in DB...
-
-@app.post("/run-analysis")
-async def run_analysis(job: dict, background_tasks: BackgroundTasks):
-    s3_path = job.get("s3_path")
-    job_id = job.get("job_id")
-    background_tasks.add_task(run_deseq2_container, s3_path, job_id)
-    return {"message": "Analysis started"}`
+1.  **Start Node:** Change trigger to "Triggered by another workflow".
+2.  **Postgres Node (Update Status):**
+    -   Query: UPDATE jobs SET status = 'RUNNING' WHERE id = {{$json.query.job_id}};
+3.  **Execute Command Node:**
+    -   Command: docker run --rm --name job-{{$json.query.job_id}} omics-worker:latest --input {{$json.query.inputFile}}
+4.  **IF Node:**
+    -   Checks the exit code of the command node. {{$node["Execute Command"].json["exitCode"]}}
+    -   If 0, the job succeeded. If not 0, it failed.
+5.  **Postgres Node (Success):**
+    -   Query: UPDATE jobs SET status = 'COMPLETED' WHERE id = {{$json.query.job_id}};
+6.  **Postgres Node (Failure):**
+    -   Query: UPDATE jobs SET status = 'FAILED' WHERE id = {{$json.query.job_id}};`
       },
     ],
     checklist: [
-      { text: 'Build the "Upload Handler" n8n workflow.' },
-      { text: 'Build the "Start Analysis" n8n workflow.' },
-      { text: 'Create the Dockerfile and R script for the analysis worker.' },
-      { text: 'Implement the FastAPI job runner microservice.' },
-      { text: 'Test the end-to-end flow from webhook to container execution.' },
+      { text: 'Create a new workflow named "Start Analysis".' },
+      { text: 'Change its Start node to be triggered by another workflow.' },
+      { text: 'Add a Postgres node to update the job status to RUNNING.' },
+      { text: 'Add the Execute Command node to run `docker run` command.' },
+      { text: 'Add an IF node and subsequent Postgres nodes to handle success and failure.' },
+      { text: 'Go back to the "Upload Handler" workflow and link it to this one using the Execute Workflow node.' },
     ],
   },
   {
     id: 5,
-    title: 'R Worker & Containerization',
-    description: 'Creating the DESeq2 analysis worker.',
-    longDescription: 'The actual scientific analysis happens inside a Docker container. We will create an R script that runs DESeq2, parameterize it to accept inputs via command-line arguments, and wrap it in a Dockerfile with all necessary dependencies.',
+    title: 'Build Notification Workflow',
+    description: 'Notifying users when their analysis is complete.',
+    longDescription: 'Keeping users informed is crucial. We will create a simple workflow that is triggered after the analysis finishes (either successfully or not) and sends an email to the user with the status of their job.',
     examples: [
-      {
-        type: 'code',
-        title: 'Dockerfile for R Worker',
-        language: 'bash',
+        {
+        type: 'text',
+        title: 'Workflow Steps & Node Configuration',
         content: `
-FROM rocker/r-ver:4.2.0
-
-RUN R -e "install.packages('BiocManager', repos = 'http://cran.us.r-project.org')"
-RUN R -e "BiocManager::install('DESeq2')"
-RUN R -e "install.packages('argparse')"
-
-WORKDIR /app
-COPY run_deseq2.R .
-
-ENTRYPOINT ["Rscript", "/app/run_deseq2.R"]`
-      },
-      {
-        type: 'code',
-        title: 'R Script Snippet (argparse)',
-        language: 'r',
-        content: `
-library("argparse")
-parser <- ArgumentParser()
-
-parser$add_argument("--counts", help="Path to counts CSV file.")
-parser$add_argument("--metadata", help="Path to metadata CSV file.")
-parser$add_argument("--out_prefix", help="Prefix for output files.")
-
-args <- parser$parse_args()
-
-# ... Your DESeq2 code here using args$counts, etc.
-# ... Write results (plots, CSVs) to files.`
+1.  **Start Node:** Triggered by another workflow.
+2.  **Postgres Node (Get Job Info):**
+    -   Query: SELECT u.email, j.status FROM jobs j JOIN users u ON j.user_id = u.id WHERE j.id = {{$json.query.job_id}};
+3.  **IF Node:**
+    -   Checks the status from the Postgres node: {{$node["Postgres"].json["status"]}}
+4.  **Send Email Node (Success):**
+    -   Configure with your email credentials (e.g., SMTP or Gmail).
+    -   To: {{$node["Postgres"].json["email"]}}
+    -   Subject: Your OmicsInsight Analysis is Complete!
+5.  **Send Email Node (Failure):**
+    -   To: {{$node["Postgres"].json["email"]}}
+    -   Subject: Your OmicsInsight Analysis Failed`
       },
     ],
     checklist: [
-      { text: 'Write the R script to perform DESeq2 analysis.' },
-      { text: 'Add argument parsing to the R script for inputs/outputs.' },
-      { text: 'Create a Dockerfile to install R, BiocManager, and dependencies.' },
-      { text: 'Build the Docker image and test it locally.' },
-      { text: 'Push the Docker image to a container registry (e.g., Docker Hub, AWS ECR).' },
+      { text: 'Create a new workflow named "Notify User".' },
+      { text: 'Add a Postgres node to fetch the user email and job status.' },
+      { text: 'Add an IF node to branch based on job status.' },
+      { text: 'Add and configure two Send Email nodes for success and failure cases.' },
+      { text: 'Update the "Start Analysis" workflow to execute this notification workflow on both success and failure paths.' },
     ],
   },
   {
     id: 6,
-    title: 'Workflow: Monitoring & Notifications',
-    description: 'Ensuring reliability and keeping users informed.',
-    longDescription: 'A long-running analysis needs monitoring. We will create a polling workflow in n8n that checks job status. Upon completion or failure, it will trigger another workflow to process results and notify the user via email or Slack.',
+    title: 'Integrate Stripe for Billing',
+    description: 'Monetize your service by handling subscription events from Stripe.',
+    longDescription: 'To turn this project into a business, we need to handle payments. We will create a workflow with a Stripe Trigger node. This node provides a unique URL that we will give to Stripe, which will call it whenever a subscription event happens (e.g., a user pays, cancels, etc.). Our workflow will then update the user\'s plan in our database.',
     examples: [
       {
         type: 'code',
-        title: 'n8n Job Monitor Workflow (Logic)',
+        title: 'Stripe Webhook Workflow (Logic)',
         language: 'json',
         content: `
-// 1. Cron Node: Run every 5 minutes.
-// 2. Postgres Node: SELECT * FROM jobs WHERE status = 'RUNNING'.
-// 3. SplitInBatches Node: Process each running job.
-// 4. HTTP Request Node: Poll the job runner for status.
-// 5. IF Node: Check if status is 'COMPLETED' or 'FAILED'.
-// 6. On 'COMPLETED': Trigger 'Results Post-Processing' workflow.
-// 7. On 'FAILED': Trigger 'Error Notification' workflow.`
-      },
-      {
-        type: 'code',
-        title: 'n8n Notification Workflow (Nodes)',
-        language: 'json',
-        content: `
-// 1. Webhook Node: Triggered by other workflows.
-// 2. IF Node: Check if status is success or failure.
-// 3. Email Node (Success): Send an email with a link to results.
-// 4. Slack Node (Failure): Send an alert to the admin channel.`
+// 1. Stripe Trigger Node: Listens for events. Copy its Webhook URL.
+//    - In Stripe Dashboard > Developers > Webhooks, add an endpoint using this URL.
+//    - Listen for events like 'invoice.paid' and 'customer.subscription.deleted'.
+// 2. Switch Node:
+//    - Routes the workflow based on the event type: '{{$json.body.type}}'
+// 3. Postgres Node (on 'invoice.paid' path):
+//    - Query: UPDATE users SET plan = 'pro' WHERE stripe_customer_id = '{{$json.body.data.object.customer}}';
+// 4. Postgres Node (on 'customer.subscription.deleted' path):
+//    - Query: UPDATE users SET plan = 'free' WHERE stripe_customer_id = '{{$json.body.data.object.customer}}';`
       },
     ],
     checklist: [
-      { text: 'Build the "Job Monitor" n8n workflow.' },
-      { text: 'Build the "Results Post-Processing" workflow (e.g., zip files, generate PDF).' },
-      { text: 'Build the "Notification" workflow for success and failure cases.' },
-      { text: 'Configure Email and Slack credentials in n8n.' },
-      { text: 'Test the monitoring and notification flows.' },
+      { text: 'In n8n, create a workflow named "Stripe Handler".' },
+      { text: 'Add a Stripe Trigger node and copy its webhook URL.' },
+      { text: 'In your Stripe dashboard, create a new webhook endpoint.' },
+      { text: 'Add a Switch node to handle different event types.' },
+      { text: 'Add Postgres nodes to update user subscription status in your database.' },
     ],
   },
   {
     id: 7,
-    title: 'Deployment',
-    description: 'Making your n8n-powered service live.',
-    longDescription: 'Deployment involves setting up n8n and its supporting services (Postgres, job runner) in a production environment. We will use a cloud provider and focus on container-based deployments for consistency and scalability.',
+    title: 'Deployment to Production',
+    description: 'Taking your n8n-powered service from local to live.',
+    longDescription: 'Running on your local machine is great for development, but now it\'s time to go live. Deployment involves setting up your services on a cloud server. The principles are the same as our local Docker setup, but we will use production-grade managed services for reliability and scalability.',
     examples: [
       {
         type: 'text',
-        title: 'Production Deployment Strategy',
-        content: '- n8n: Deploy using Docker on a cloud VM (e.g., DigitalOcean Droplet, AWS EC2) or a managed container service.\n- R Worker: Use a service like AWS Fargate or Google Cloud Run to run analysis containers on-demand.\n- FastAPI Job Runner: Deploy as a container alongside n8n.\n- Database: Use a managed database service like Amazon RDS or Supabase Postgres.',
-      },
-      {
-        type: 'text',
-        title: 'Security Best Practices',
-        content: '- Protect n8n webhook URLs with a secret token or HMAC validation.\n- Use n8n\'s built-in credential management; do not hardcode keys.\n- Use pre-signed S3 URLs for uploads to avoid data passing through the n8n instance.\n- Enforce SSL/HTTPS on all endpoints.'
+        title: 'Production Checklist',
+        content: `- Cloud Server: Rent a Virtual Private Server (VPS) from a provider like DigitalOcean or AWS (EC2).
+- Managed Database: Use a service like AWS RDS or Supabase for your PostgreSQL database. This handles backups and scaling for you.
+- Managed Storage: Use a real AWS S3 bucket instead of local MinIO.
+- Container Registry: Push your \`omics-worker\` Docker image to a registry like Docker Hub or AWS ECR.
+- Reverse Proxy: Use Nginx or Caddy to manage incoming traffic and provide SSL certificates (HTTPS).
+- Environment Variables: Securely provide all your production credentials (database URLs, API keys) to your n8n instance.`
       },
     ],
     checklist: [
-      { text: 'Set up a production database (e.g., AWS RDS).' },
-      { text: 'Choose a cloud provider and deployment method for n8n.' },
-      { text: 'Deploy the FastAPI job runner service.' },
-      { text: 'Configure production environment variables and credentials in n8n.' },
-      { text: 'Set up a reverse proxy (e.g., Nginx) with HTTPS for all services.' },
+      { text: 'Choose a cloud provider and provision a server.' },
+      { text: 'Set up a managed PostgreSQL database and get its connection URL.' },
+      { text: 'Create a production S3 bucket in AWS.' },
+      { text: 'Push your \`omics-worker\` Docker image to a container registry.' },
+      { text: 'Install n8n on your server (using Docker is recommended).' },
+      { text: 'Configure all production credentials and environment variables in n8n.' },
+      { text: 'Set up a domain name and configure a reverse proxy with HTTPS.' },
     ],
   },
-  {
+   {
     id: 8,
-    title: 'Workflow: Billing & Admin',
-    description: 'Integrating Stripe for payments and creating admin workflows.',
-    longDescription: 'To monetize the service, we will create an n8n workflow that listens to Stripe webhooks to manage user subscriptions. We will also build administrative workflows for maintenance tasks like cleaning up old data and monitoring costs.',
+    title: 'Admin & Maintenance',
+    description: 'Creating workflows to keep your service healthy and clean.',
+    longDescription: 'A running service needs looking after. We can use n8n to automate our own administrative tasks. We will build a simple workflow that runs on a schedule (using the Cron node) to perform cleanup tasks, such as deleting old data from free-tier users to save on storage costs.',
     examples: [
-      {
-        type: 'code',
-        title: 'n8n Stripe Webhook Handler (Nodes)',
-        language: 'json',
-        content: `
-// 1. Stripe Webhook Node: Listens for events like 'invoice.paid'.
-// 2. Switch Node: Route logic based on event type.
-// 3. For 'invoice.paid':
-//    - Postgres Node: UPDATE users SET plan = 'pro' WHERE stripe_customer_id = {{ $json.body.customer }}.
-// 4. For 'customer.subscription.deleted':
-//    - Postgres Node: UPDATE users SET plan = 'free' WHERE stripe_customer_id = {{ $json.body.customer }}.`
-      },
       {
         type: 'code',
         title: 'Admin Cleanup Workflow (Nodes)',
         language: 'json',
         content: `
-// 1. Cron Node: Run daily at midnight.
-// 2. Postgres Node: SELECT user_id FROM users WHERE plan = 'free'.
-// 3. S3 Node: List files older than 30 days for free-tier users.
-// 4. S3 Node: Delete old files.`
+// 1. Cron Node:
+//    - Mode: Every Day, Hour: 3 (Runs at 3 AM)
+// 2. Postgres Node:
+//    - Query: SELECT * FROM jobs WHERE status = 'COMPLETED' AND plan = 'free' AND created_at < NOW() - INTERVAL '30 days';
+// 3. SplitInBatches Node:
+//    - Process each old job one by one.
+// 4. S3 Node (Delete):
+//    - Configure with your S3 credentials.
+//    - Operation: Delete
+//    - Bucket Name: your-omics-data-bucket
+//    - Key: {{$json.s3_output_path}}
+// 5. Postgres Node (Delete Record):
+//    - Query: DELETE FROM jobs WHERE id = {{$json.id}};`
       },
     ],
     checklist: [
-      { text: 'Create a Stripe account and define your subscription products.' },
-      { text: 'Build the "Stripe Webhook Handler" n8n workflow.' },
-      { text: 'Add subscription/plan status to your `users` table in Postgres.' },
-      { text: 'Build the "Admin Cleanup" workflow.' },
-      { text: 'Create a cost-monitoring workflow that sends a daily summary to Slack.' },
+      { text: 'Create a new workflow named "Daily Cleanup".' },
+      { text: 'Add a Cron node and set it to run daily.' },
+      { text: 'Add a Postgres node to find old jobs belonging to free users.' },
+      { text: 'Add an S3 node to delete the associated result files.' },
+      { text: 'Add a final Postgres node to delete the job record from the database.' },
     ],
   },
   {
     id: 9,
     title: 'Launch & Export Summary',
-    description: 'Final checks and exporting your project plan.',
-    longDescription: 'Congratulations! You have designed a fully automated SaaS orchestrated by n8n. This final step is about running through a pre-launch checklist and celebrating. You can also export your progress from this builder as a JSON file to document your entire plan.',
+    description: 'Final checks and exporting your complete project plan.',
+    longDescription: 'Congratulations! You have designed and planned a fully automated, n8n-orchestrated SaaS platform. This final step is about running through a pre-launch checklist and celebrating your work. You can also export your progress from this builder as a JSON file to document your entire plan and all the steps you\'ve completed.',
     examples: [
       {
         type: 'text',
-        title: 'Pre-Launch Checklist',
-        content: '- [ ] Set up logging and monitoring for n8n and all microservices.\n- [ ] Set up error monitoring (e.g., Sentry) via n8n\'s error workflow trigger.\n- [ ] Double-check all production credentials and environment variables.\n- [ ] Announce your launch on relevant platforms (e.g., Twitter, LinkedIn, scientific forums).',
+        title: 'Final Pre-Launch Checklist',
+        content: '- [ ] Have you tested the entire user flow, from upload to email notification, in production?\n- [ ] Is your Stripe webhook configured with the production URL from your live n8n instance?\n- [ ] Have you set up basic logging and monitoring for your server and n8n?\n- [ ] Have you backed up your n8n workflows and credentials?',
       }
     ],
     checklist: [
       { text: 'Complete the pre-launch checklist.' },
       { text: 'Prepare your launch announcement and marketing materials.' },
-      { text: 'Monitor n8n execution logs for errors after launch.' },
+      { text: 'Monitor n8n execution logs for any errors after going live.' },
       { text: 'Export your project summary from this builder.' },
       { text: 'Celebrate building a robust, automated platform!' },
     ],
